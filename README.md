@@ -1,0 +1,1 @@
+Эндээс бот токен аваарай. https://discord.com/developers
