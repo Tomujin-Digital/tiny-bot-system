@@ -12,9 +12,14 @@ export class DiscordModule {
     });
     discord.login(token);
 
-    const discordCallback = (callback: any) => {
+    const discordCallback = (
+      command: string,
+      callback: (message: Message) => void,
+    ) => {
       discord.on('message', (message: Message) => {
-        if (message.content.includes('!ping')) callback(message);
+        // Mention тооцох, Dynamic биш байна
+        const content = message.content.toLowerCase();
+        if (content === command) callback(message);
       });
     };
 
