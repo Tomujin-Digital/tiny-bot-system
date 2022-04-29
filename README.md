@@ -34,8 +34,7 @@ class SomeService{
     Inject('DISCORD_CLIENT') private readonly discord:      
     DiscordClient
     ) {
-      discord("commend", testFunction)
-
+      discord("commend", testFunction).messageListen()
     }
 
     this.testFunction(message: Messsage) {
