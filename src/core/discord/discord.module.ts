@@ -14,19 +14,26 @@ export class DiscordModule {
 
     const discordCallback = (
       command: string,
-      callback: (message: Message) => void,
+      callback: (message: any) => void,
     ) => {
-      discord.on('message', (message: Message) => {
-        // Mention тооцох, Dynamic биш байна
-        const content = message.content.toLowerCase();
-        if (content === command) callback(message);
-      });
+      return {
+        messageListen: () =>
+          discord.on('message', (message: Message) => {
+            console.log(message.content);
+            // Mention тооцох, Dynamic биш байна
+            // log бичих бүтэцтэй
+            const content = message.content.toLowerCase();
+            if (content === command) callback(message);
+          }),
+        interactionLister: () => discord.on('interactionCreate', callback),
+      };
     };
 
     const discordProvider: Provider = {
       provide: 'DISCORD_CLIENT',
       useValue: discordCallback,
     };
+
     return {
       module: DiscordModule,
       providers: [discordProvider],
