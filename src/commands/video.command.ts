@@ -6,8 +6,8 @@ export class VideoCommand {
   constructor(
     @Inject('DISCORD_CLIENT') private readonly discord: DiscordClient,
   ) {
-    this.discord('!video', this.sendSomething).messageListen();
-    this.discord('some_id', this.videoLinkSentInteraction).interactionLister();
+    this.discord.listen('!video', this.sendSomething).message();
+    this.discord.listen('some_id', this.videoLinkSentInteraction).interaction();
   }
 
   // Step 2

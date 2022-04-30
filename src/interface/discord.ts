@@ -1,4 +1,15 @@
-export type DiscordClient = (
-  command: string,
-  callback: (message: any) => void,
-) => { messageListen: () => void; interactionLister: () => void };
+import { Client } from 'discord.js';
+
+export type DiscordClient = {
+  client: Client<boolean>;
+  listen: (
+    command: string,
+    callback: (att1?: any, att2?: any) => void,
+  ) => {
+    discord: Client<boolean>;
+    message: () => void;
+    interaction: () => void;
+    reactionAdd: () => void;
+    reactionRemove: () => void;
+  };
+};
