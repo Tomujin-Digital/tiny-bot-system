@@ -1,13 +1,10 @@
 import { Inject } from '@nestjs/common';
 import { Interaction, Message } from 'discord.js';
-import { DiscordClient } from '../interface/discord';
 
 export class VideoCommand {
-  constructor(
-    @Inject('DISCORD_CLIENT') private readonly discord: DiscordClient,
-  ) {
-    this.discord.listen('!video', this.sendSomething).message();
-    this.discord.listen('some_id', this.videoLinkSentInteraction).interaction();
+  constructor(@Inject('DISCORD_CLIENT') private readonly discord: any) {
+    // this.discord.listen('!video', this.sendSomething).message();
+    // this.discord.listen('some_id', this.videoLinkSentInteraction).interaction();
   }
 
   // Step 2

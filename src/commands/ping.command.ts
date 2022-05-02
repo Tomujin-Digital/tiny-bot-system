@@ -1,26 +1,29 @@
 import { Inject } from '@nestjs/common';
-import { Message, MessageReaction, User } from 'discord.js';
-import { DiscordClient } from '../interface/discord';
+import { Client, Message, MessageReaction, User } from 'discord.js';
+// import { DiscordClient } from '../interface/discord';
 
 export class PingCommand {
-  constructor(
-    @Inject('DISCORD_CLIENT') public readonly discord: DiscordClient,
-  ) {
-    this.discord.listen('test run', this.run).message();
-    this.discord.listen('test run', this.reactionAdd).reactionAdd();
-  }
-  async run(message: Message) {
-    const replied = await message.channel.send('pong');
-    replied.react('😁');
-  }
+  users: string[];
+  constructor(@Inject('DISCORD_CLIENT') private readonly: Client) {}
   public async consoler() {
     console.log('Something');
   }
 
+  async run(message: Message) {
+    const replied = await message.channel.send('okay');
+    replied.react('1️⃣');
+    replied.react('2️⃣');
+  }
+
   async reactionAdd(message: MessageReaction, user: User) {
-    if (message.emoji.name === '😁') {
-      console.log(user.id);
-    }
-    console.log('reaction add');
+    this.consoler();
+    console.log(user.bot);
+    if (user.bot) return;
+    if (message.emoji.name === '1️⃣')
+      message.message.reply(
+        "Sorry! You didn't get the point" + `<@${user.id}>`,
+      );
+    if (message.emoji.name === '2️⃣')
+      message.message.reply('You get the point! ' + `<@${user.id}>`);
   }
 }
