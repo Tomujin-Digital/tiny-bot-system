@@ -10,15 +10,12 @@ export class DiscordModule {
         Intents.FLAGS.GUILDS,
         Intents.FLAGS.GUILD_MESSAGES,
         Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+        Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
       ],
-      partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
+      partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'USER'],
     });
     discord.on('ready', () => {
       console.log(`Logged in as ${discord.user.tag}!`);
-    });
-
-    discord.on('messageReactionAdd', (interaction) => {
-      console.log(interaction);
     });
 
     discord.login(token);

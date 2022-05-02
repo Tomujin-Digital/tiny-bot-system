@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { Interaction, Message } from 'discord.js';
+import { Interaction } from 'discord.js';
 
 export class VideoCommand {
   constructor(@Inject('DISCORD_CLIENT') private readonly discord: any) {
@@ -20,50 +20,4 @@ export class VideoCommand {
     }
   }
   // Step 1
-  async sendSomething(message: Message) {
-    message.channel.send({
-      embeds: [
-        {
-          title: 'some title',
-          description: 'some description',
-        },
-      ],
-      components: [
-        {
-          type: 1,
-          components: [
-            {
-              style: 1,
-              label: 'some label',
-              customId: 'some_id',
-              disabled: false,
-              type: 2,
-            },
-            {
-              style: 1,
-              label: 'some label',
-              customId: 'some_id1',
-              disabled: false,
-              type: 2,
-            },
-            {
-              style: 1,
-              label: 'some label',
-              customId: 'some_id2',
-              disabled: false,
-              type: 2,
-            },
-            {
-              style: 1,
-              label: 'some label',
-              customId: 'some_id3',
-              disabled: false,
-              type: 2,
-            },
-          ],
-        },
-      ],
-    });
-    message.channel.send('Something');
-  }
 }
