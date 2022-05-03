@@ -12,8 +12,11 @@ export class CommandModule {
       const [command, ...args] = message.content.split(' ');
       console.log(args);
 
-      if (command.toLocaleLowerCase() === 'ping')
+      if (command.toLocaleLowerCase() === 'quest')
         await pingCommand.message(message);
+
+      if (command.toLocaleLowerCase() === 'video')
+        await pingCommand.video(message);
     });
 
     this.client.on('messageReactionAdd', async (message, user) => {
@@ -21,7 +24,10 @@ export class CommandModule {
       await pingCommand.reactionAdd(message, user);
     });
 
-    // discord.on('interactionCreate', (interaction) => callback(interaction));
+    this.client.on('interactionCreate', (interaction) => {
+      pingCommand.answerChecker(interaction);
+    });
+
     // discord.on('messageReactionAdd', (interaction) => callback(interaction));
     // discord.on('messageReactionRemove', (interaction) => callback(interaction)),
   }

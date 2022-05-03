@@ -1,6 +1,7 @@
 import { Inject } from '@nestjs/common';
 import {
   Client,
+  Interaction,
   Message,
   MessageReaction,
   PartialMessageReaction,
@@ -32,7 +33,7 @@ export class PingCommand {
     console.log('Something');
   }
 
-  emojiReader(emoji, type: 'unicode' | 'emoji' = 'unicode') {
+  emojiReader(emoji: any, type: 'unicode' | 'emoji' = 'unicode') {
     if (type === 'unicode')
       switch (emoji) {
         case '1️⃣':
@@ -60,6 +61,12 @@ export class PingCommand {
           return '4️⃣';
       }
   }
+
+  async video(message: Message) {
+    message.channel.send(
+      'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
+    );
+  }
   async message(message: Message) {
     const userId = message.author.id;
     if (this.users[userId]) {
@@ -76,7 +83,7 @@ export class PingCommand {
       message.reply('Today daily challenge done for you XD');
       return;
     }
-    const replied = await message.channel.send({
+    message.channel.send({
       embeds: [
         {
           title: this.questions[this.users[userId].question].question,
@@ -88,11 +95,43 @@ export class PingCommand {
             .join('\n'),
         },
       ],
+      components: [
+        {
+          type: 1,
+          components: this.questions[this.users[userId].question].tricks.map(
+            (trick, index) => ({
+              style: 1,
+              label: this.emojiReader(index + 1, 'emoji') + ' | ' + trick,
+              customId: 'answer_' + index,
+              disabled: false,
+              type: 2,
+            }),
+          ),
+        },
+      ],
     });
-    replied.react('1️⃣');
-    replied.react('2️⃣');
-    replied.react('3️⃣');
-    replied.react('4️⃣');
+  }
+
+  async answerChecker(interaction: Interaction) {
+    if (!interaction.isButton) return;
+
+    const user = interaction.member.user || interaction.channel;
+
+    if (!this.users[user.id]) return;
+    if (this.users[user.id].answered) return;
+    if (!this.questions[this.users[user.id].question]) return;
+
+    const answer = this.emojiReader(
+      interaction.id.replace('answer_', ''),
+      'unicode',
+    ) as number;
+    if (answer - 1 === this.questions[this.users[user.id].question].answer) {
+      interaction.channel.send('Correct, You get the point! ');
+    } else {
+      interaction.channel.send("Sorry! You didn't get the point");
+    }
+
+    this.users[user.id].answered = true;
   }
 
   async reactionAdd(
@@ -102,7 +141,7 @@ export class PingCommand {
     if (!this.users[user.id]) return;
     if (this.users[user.id].answered) return;
     if (user.bot) return;
-    console.log(message.emoji.identifier, 'U+fe0f');
+    if (!this.questions[this.users[user.id].question]) return;
     const answer = this.emojiReader(message.emoji.name, 'unicode') as number;
     if (answer - 1 === this.questions[this.users[user.id].question].answer) {
       message.message.reply('Correct, You get the point! ');
