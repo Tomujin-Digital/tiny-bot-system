@@ -134,6 +134,10 @@ export class PingCommand {
     this.users[user.id].answered = true;
   }
 
+  async leaderboard() {
+    const leaderboard = ['test', 'test', 'test'].join('\n');
+  }
+
   async reactionAdd(
     message: MessageReaction | PartialMessageReaction,
     user: User | PartialUser,
